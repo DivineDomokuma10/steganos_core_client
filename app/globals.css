@@ -13,6 +13,14 @@
   --font-space-groktesk: var(--font-space-groktesk);
 }
 
+.glow-text {
+  @apply [text-shadow:0_0_20px_rgba(255,255,255,0.6)];
+}
+
+.btn-glow {
+  @apply [box-shadow:0_0_14px_rgba(0,240,255,0.4),_0_0_14px_rgba(0,240,255,0.2)] [text-shadow:0_0_10px_rgba(0,240,255,0.5)];
+}
+
 /* 
 @media (prefers-color-scheme: dark) {
   :root {
