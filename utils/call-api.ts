@@ -8,8 +8,6 @@ const baseUrl = assertEnv(
   "ENV is MISSING. Please add NEXT_PUBLIC_BACKEND_URL to your .env file.",
 );
 
-console.log(baseUrl);
-
 const api: AxiosInstance = axios.create({
   baseURL: baseUrl,
   timeout: 60000,
