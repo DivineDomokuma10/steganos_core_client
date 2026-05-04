@@ -1,12 +1,12 @@
-import { TApiResponse } from "@/types";
-import CallApi from "@/utils/call-api";
-import { AUTH_ENDPOINTS } from "@/enum";
 import {
   ILoginFields,
   ILoginResponse,
   IRegisterFields,
   IRegisterResponse,
 } from "@/interface";
+import { TApiResponse } from "@/types";
+import CallApi from "@/utils/call-api";
+import { AUTH_ENDPOINTS } from "@/enum";
 
 class AuthApi {
   static async login(payload: ILoginFields) {
@@ -17,7 +17,7 @@ class AuthApi {
     );
 
     if (res.status === "error") {
-      return { error: res.message };
+      return { message: res.message };
     }
 
     return { data: res.data, message: res.message };
@@ -31,7 +31,20 @@ class AuthApi {
     );
 
     if (res.status === "error") {
-      return { error: res.message };
+      return { message: res.message };
+    }
+
+    return { data: res.data, message: res.message };
+  }
+
+  static async refresh() {
+    const res = await CallApi<TApiResponse<ILoginResponse>>(
+      AUTH_ENDPOINTS.REFRESH,
+      "GET",
+    );
+
+    if (res.status === "error") {
+      return { message: res.message };
     }
 
     return { data: res.data, message: res.message };

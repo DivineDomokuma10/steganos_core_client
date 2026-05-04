@@ -2,6 +2,8 @@ import axios, { AxiosInstance } from "axios";
 
 import { THttpMethod } from "@/types";
 import { assertEnv, getHeaderConfig } from "./call-api-helper";
+import AuthStore from "@/store/auth";
+import AuthApi from "@/api/auth";
 
 const baseUrl = assertEnv(
   process.env.NEXT_PUBLIC_BACKEND_URL!,
@@ -13,6 +15,40 @@ const api: AxiosInstance = axios.create({
   timeout: 60000,
 });
 
+api.interceptors.request.use(
+  (config) => {
+    const authData = AuthStore.getState().authData;
+
+    config.headers.Authorization = `Bearer ${authData?.accessToken}`;
+    return config;
+  },
+  (err) => {
+    return Promise.reject(err);
+  },
+);
+
+api.interceptors.response.use(
+  (res) => res,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      const { data } = await AuthApi.refresh();
+
+      if (data) {
+        AuthStore.getState().mutateAuthData(data);
+        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+      }
+
+      return api(originalRequest);
+    }
+
+    return Promise.reject(error);
+  },
+);
+
 const CallApi = async <T, P = unknown>(
   url: string,
   method: THttpMethod,
@@ -22,17 +58,20 @@ const CallApi = async <T, P = unknown>(
     const resp = await api({
       url,
       method,
-      ...(payload && { data: payload }),
+      data: payload ?? undefined,
       headers: {
-        "x-referer": process.env.NEXT_PUBLIC_FRONTEND_URL,
-        ...getHeaderConfig<typeof payload>(payload),
+        ...getHeaderConfig(payload),
       },
     });
 
-    return resp.data as T;
-  } catch (error: any) {
+    return resp.data satisfies T;
+  } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      throw error.response?.data ?? error.message;
+      throw {
+        message: error.response?.data?.message ?? error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+      };
     }
 
     throw error;

@@ -4,13 +4,15 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useFormError } from "@/hook";
+import { useFormError, useResponseMsg } from "@/hook";
+import { useRegisterMutation } from "@/hook/queries/auth";
+
+import { AuthInput } from "../components";
 import { IRegisterFields } from "@/interface";
 import { registerSchema } from "@/schema/auth";
 
 import Button from "@/components/shared/button";
-import { AuthInput, ErrorMessages } from "../components";
-import { useRegisterMutation } from "@/hook/queries/auth.hook";
+import MessagesBox from "@/components/shared/message-box";
 
 const Register = () => {
   const { register, handleSubmit, formState } = useForm<IRegisterFields>({
@@ -20,24 +22,28 @@ const Register = () => {
 
   const { isValid, errors } = formState;
 
-  const { isErrorExist, errorMessages } = useFormError(errors);
-
   const { mutate, isPending } = useRegisterMutation();
+
+  const { resMsg, setResponseMsg } = useResponseMsg();
+
+  const { isErrorExist, errorMessages } = useFormError(errors);
 
   const onsubmit = async (data: IRegisterFields) => {
     mutate(data, {
       onSuccess(res) {
-        console.log(res.message);
+        setResponseMsg({ msg: res.message, status: "success" });
       },
       onError(err) {
-        console.log(err.message);
+        setResponseMsg({ msg: err.message, status: "error" });
       },
     });
   };
 
   return (
     <main className="w-full flex flex-col items-center space-y-7 p-5 md:w-[35%]">
-      {isErrorExist && <ErrorMessages {...{ errorMessages }} />}
+      {isErrorExist && <MessagesBox status="error" messages={errorMessages} />}
+
+      {resMsg && <MessagesBox status={resMsg.status} messages={resMsg.msg} />}
 
       <form
         onSubmit={handleSubmit(onsubmit)}

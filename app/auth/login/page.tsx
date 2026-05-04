@@ -1,18 +1,24 @@
 "use client";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Fingerprint, Key, Loader2 } from "lucide-react";
 
-import { useFormError } from "@/hook";
+import { useFormError, useResponseMsg } from "@/hook";
+import { useLoginMutation } from "@/hook/queries/auth";
+
+import useAuthStore from "@/store/auth";
+import { AuthInput } from "../components";
 import { ILoginFields } from "@/interface";
 import { loginSchema } from "@/schema/auth";
 
 import Button from "@/components/shared/button";
-import { AuthInput, ErrorMessages } from "../components";
-import { useLoginMutation } from "@/hook/queries/auth.hook";
+import MessagesBox from "@/components/shared/message-box";
 
 const Login = () => {
+  const router = useRouter();
+
   const { register, handleSubmit, formState } = useForm<ILoginFields>({
     mode: "onChange",
     resolver: zodResolver(loginSchema),
@@ -20,24 +26,41 @@ const Login = () => {
 
   const { isValid, errors } = formState;
 
+  const { mutate, isPending } = useLoginMutation();
+
+  const { resMsg, setResponseMsg } = useResponseMsg();
+
   const { isErrorExist, errorMessages } = useFormError(errors);
 
-  const { mutate, isPending } = useLoginMutation();
+  const { mutateAuthData } = useAuthStore();
 
   const onsubmit = async (data: ILoginFields) => {
     mutate(data, {
       onSuccess(res) {
-        console.log(res.message);
+        if (res.data) {
+          const { accessToken, userId } = res.data;
+
+          mutateAuthData({
+            userId,
+            accessToken,
+          });
+        }
+
+        setResponseMsg({ msg: res.message, status: "success" });
+
+        setTimeout(() => router.replace("/"), 1000);
       },
       onError(err) {
-        console.log(err.message);
+        setResponseMsg({ msg: err.message, status: "error" });
       },
     });
   };
 
   return (
     <main className="w-full flex flex-col items-center space-y-7 p-5 md:w-[35%]">
-      {isErrorExist && <ErrorMessages {...{ errorMessages }} />}
+      {isErrorExist && <MessagesBox status="error" messages={errorMessages} />}
+
+      {resMsg && <MessagesBox status={resMsg.status} messages={resMsg.msg} />}
 
       <form
         onSubmit={handleSubmit(onsubmit)}

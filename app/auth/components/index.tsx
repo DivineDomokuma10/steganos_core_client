@@ -1,9 +1,6 @@
 import { TLucideIcon } from "@/types";
-import { Path, FieldValues, UseFormRegister } from "react-hook-form";
 
-interface IErrorMessagesProps {
-  errorMessages: string[];
-}
+import { Path, FieldValues, UseFormRegister } from "react-hook-form";
 
 interface IAuthInputProps<T extends FieldValues> {
   type: string;
@@ -47,17 +44,3 @@ export function AuthInput<T extends FieldValues>({
     </label>
   );
 }
-
-export const ErrorMessages = ({ errorMessages }: IErrorMessagesProps) => {
-  return (
-    <section className="w-full p-5 border bg-red-600/10 border-red-600 flex flex-col space-y-2">
-      {errorMessages.map((errMsg, i) => (
-        <div key={errMsg + i} className="flex space-x-2">
-          <div className="w-2 h-2 rounded-full bg-red-500" />
-
-          <p className="text-red-500 text-sm">{errMsg.toUpperCase()}</p>
-        </div>
-      ))}
-    </section>
-  );
-};
