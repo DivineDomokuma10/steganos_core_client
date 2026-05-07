@@ -1,8 +1,8 @@
 "use client";
 import { Loader2 } from "lucide-react";
 
-import AppLogo from "@/components/shared/logo";
 import { useGetUserProfile } from "@/hook/queries/user";
+import DashboardWrapper from "@/components/shared/dashboard-wrapper";
 
 export default function Home() {
   const { data, isLoading, error } = useGetUserProfile();
@@ -23,9 +23,5 @@ export default function Home() {
     );
   }
 
-  return (
-    <div className="bg-background">
-      <AppLogo /> {JSON.stringify(data?.data)}
-    </div>
-  );
+  return <DashboardWrapper>{JSON.stringify(data?.data)}</DashboardWrapper>;
 }

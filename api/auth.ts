@@ -1,15 +1,12 @@
-import {
-  ILoginFields,
-  ILoginResponse,
-  IRegisterFields,
-  IRegisterResponse,
-} from "@/interface";
 import { TApiResponse } from "@/types";
 import CallApi from "@/utils/call-api";
 import { AUTH_ENDPOINTS } from "@/enum";
 
+import { ILoginResponse, IRegisterResponse } from "@/interface";
+import { TLoginFormValues, TRegisterFormValues } from "@/types/schema-derived";
+
 class AuthApi {
-  static async login(payload: ILoginFields) {
+  static async login(payload: TLoginFormValues) {
     const res = await CallApi<TApiResponse<ILoginResponse>>(
       AUTH_ENDPOINTS.LOGIN,
       "POST",
@@ -23,7 +20,7 @@ class AuthApi {
     return { data: res.data, message: res.message };
   }
 
-  static async register(payload: IRegisterFields) {
+  static async register(payload: TRegisterFormValues) {
     const res = await CallApi<TApiResponse<IRegisterResponse>>(
       AUTH_ENDPOINTS.REGISTER,
       "POST",

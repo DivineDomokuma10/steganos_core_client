@@ -1,15 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 
-import {
-  ILoginFields as LoginPayload,
-  IRegisterFields as SignupPayload,
-} from "@/interface";
 import AuthApi from "@/api/auth";
+import { TLoginFormValues, TRegisterFormValues } from "@/types/schema-derived";
 
 export const useRegisterMutation = () => {
   return useMutation({
     mutationKey: ["register"],
-    mutationFn: async (payload: SignupPayload) =>
+    mutationFn: async (payload: TRegisterFormValues) =>
       await AuthApi.register(payload),
   });
 };
@@ -17,6 +14,7 @@ export const useRegisterMutation = () => {
 export const useLoginMutation = () => {
   return useMutation({
     mutationKey: ["login"],
-    mutationFn: async (payload: LoginPayload) => await AuthApi.login(payload),
+    mutationFn: async (payload: TLoginFormValues) =>
+      await AuthApi.login(payload),
   });
 };

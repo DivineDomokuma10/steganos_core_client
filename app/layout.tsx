@@ -3,6 +3,7 @@ import { Space_Grotesk } from "next/font/google";
 
 import "./globals.css";
 import ReactQueryProvider from "@/providers/react-query";
+import ProtectRoutes from "@/components/protect";
 
 const spaceGroktesk = Space_Grotesk({
   variable: "--font-space-groktesk",
@@ -25,7 +26,9 @@ export default function RootLayout({
       <body
         className={`${spaceGroktesk.variable} antialiased bg-background !font-space-groktesk`}
       >
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <ReactQueryProvider>
+          <ProtectRoutes>{children}</ProtectRoutes>
+        </ReactQueryProvider>
       </body>
     </html>
   );

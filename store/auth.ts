@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface IAuthData {
+export interface IAuthData {
   userId: string;
   accessToken: string;
 }
@@ -8,11 +8,13 @@ interface IAuthData {
 interface IAuthStore {
   authData: IAuthData | null;
 
+  clearAuthData: () => void;
   mutateAuthData: (data: IAuthData) => void;
 }
 
 const AuthStore = create<IAuthStore>()((set) => ({
   authData: null,
+  clearAuthData: () => set({ authData: null }),
   mutateAuthData: (data) => set({ authData: data }),
 }));
 

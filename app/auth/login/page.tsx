@@ -10,16 +10,17 @@ import { useLoginMutation } from "@/hook/queries/auth";
 
 import useAuthStore from "@/store/auth";
 import { AuthInput } from "../components";
-import { ILoginFields } from "@/interface";
+
 import { loginSchema } from "@/schema/auth";
 
 import Button from "@/components/shared/button";
 import MessagesBox from "@/components/shared/message-box";
+import { TLoginFormValues } from "@/types/schema-derived";
 
 const Login = () => {
   const router = useRouter();
 
-  const { register, handleSubmit, formState } = useForm<ILoginFields>({
+  const { register, handleSubmit, formState } = useForm<TLoginFormValues>({
     mode: "onChange",
     resolver: zodResolver(loginSchema),
   });
@@ -34,7 +35,7 @@ const Login = () => {
 
   const { mutateAuthData } = useAuthStore();
 
-  const onsubmit = async (data: ILoginFields) => {
+  const onsubmit = async (data: TLoginFormValues) => {
     mutate(data, {
       onSuccess(res) {
         if (res.data) {
