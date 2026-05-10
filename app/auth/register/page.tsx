@@ -4,18 +4,18 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useFormError, useResponseMsg } from "@/hook";
+import { useResponseMsg } from "@/hook";
 import { useRegisterMutation } from "@/hook/queries/auth";
 
 import { AuthInput } from "../components";
-import { IRegisterFields } from "@/interface";
 import { registerSchema } from "@/schema/auth";
 
 import Button from "@/components/shared/button";
 import MessagesBox from "@/components/shared/message-box";
+import { TRegisterFormValues } from "@/types/schema-derived";
 
 const Register = () => {
-  const { register, handleSubmit, formState } = useForm<IRegisterFields>({
+  const { register, handleSubmit, formState } = useForm<TRegisterFormValues>({
     mode: "onChange",
     resolver: zodResolver(registerSchema),
   });
@@ -26,9 +26,7 @@ const Register = () => {
 
   const { resMsg, setResponseMsg } = useResponseMsg();
 
-  const { isErrorExist, errorMessages } = useFormError(errors);
-
-  const onsubmit = async (data: IRegisterFields) => {
+  const onsubmit = async (data: TRegisterFormValues) => {
     mutate(data, {
       onSuccess(res) {
         setResponseMsg({ msg: res.message, status: "success" });
@@ -41,8 +39,6 @@ const Register = () => {
 
   return (
     <main className="w-full flex flex-col items-center space-y-7 p-5 md:w-[35%]">
-      {isErrorExist && <MessagesBox status="error" messages={errorMessages} />}
-
       {resMsg && <MessagesBox status={resMsg.status} messages={resMsg.msg} />}
 
       <form
@@ -67,6 +63,7 @@ const Register = () => {
         <AuthInput
           type="text"
           name="username"
+          errors={errors}
           register={register}
           label="OPERATIONAL ALIAS"
           placeholder="SECURE EMAIL ADDRESS"
@@ -75,6 +72,7 @@ const Register = () => {
         <AuthInput
           type="email"
           name="email"
+          errors={errors}
           register={register}
           label="SECURE COMMS EMAIL"
           placeholder="SECURE EMAIL ADDRESS"
@@ -83,6 +81,7 @@ const Register = () => {
         <AuthInput
           type="password"
           name="password"
+          errors={errors}
           register={register}
           label="DEFINE ACCESS CIPHER"
           placeholder="* * * * * * * * * * * * * * * *"

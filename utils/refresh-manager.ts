@@ -20,6 +20,7 @@ export const refreshAccessToken = async (): Promise<string> => {
 
   try {
     const { data } = await AuthApi.refresh();
+    console.log("reponse incterceptor calls refresh");
 
     if (!data?.accessToken) {
       throw new Error("REFRESH_FAILED");

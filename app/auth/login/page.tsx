@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Fingerprint, Key, Loader2 } from "lucide-react";
 
-import { useFormError, useResponseMsg } from "@/hook";
+import { useResponseMsg } from "@/hook";
 import { useLoginMutation } from "@/hook/queries/auth";
 
 import useAuthStore from "@/store/auth";
@@ -30,8 +30,6 @@ const Login = () => {
   const { mutate, isPending } = useLoginMutation();
 
   const { resMsg, setResponseMsg } = useResponseMsg();
-
-  const { isErrorExist, errorMessages } = useFormError(errors);
 
   const { mutateAuthData } = useAuthStore();
 
@@ -59,8 +57,6 @@ const Login = () => {
 
   return (
     <main className="w-full flex flex-col items-center space-y-7 p-5 md:w-[35%]">
-      {isErrorExist && <MessagesBox status="error" messages={errorMessages} />}
-
       {resMsg && <MessagesBox status={resMsg.status} messages={resMsg.msg} />}
 
       <form
@@ -79,6 +75,7 @@ const Login = () => {
         <AuthInput
           type="email"
           name="email"
+          errors={errors}
           icon={Fingerprint}
           register={register}
           label="SECURE COMMS EMAIL"
@@ -90,6 +87,7 @@ const Login = () => {
             icon={Key}
             type="password"
             name="password"
+            errors={errors}
             register={register}
             label="ACCESS CIPHER"
             placeholder="* * * * * * * * * * * * * * * *"

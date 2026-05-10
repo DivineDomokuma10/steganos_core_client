@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${spaceGroktesk.variable} antialiased bg-background !font-space-groktesk`}
+        className={`${spaceGroktesk.variable} max-w-screen antialiased bg-background !font-space-groktesk`}
       >
         <ReactQueryProvider>
           <ProtectRoutes>{children}</ProtectRoutes>
