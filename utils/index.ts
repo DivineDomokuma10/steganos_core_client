@@ -24,3 +24,7 @@ export function toSnakeCase(text: string) {
 export function toDashCase(text: string, chars: number = 4) {
   return text.match(new RegExp(`.{1,${chars}}`, "g"))?.join("-") || "";
 }
+
+export function formatToMB(sizeInByte: number): string {
+  return `${(sizeInByte / 1024 ** 2).toFixed(2)} MB`;
+}

@@ -1,32 +1,30 @@
-import {
-  TDecodePayload,
-  TEncodePayload,
-  TEncodeResponse,
-  TDecodeResponse,
-} from "@/types/steg";
-import { TApiResponse } from "@/types";
 import CallApi from "@/utils/call-api";
 import { STEG_ENDPOINTS } from "@/enum";
 
+import { TApiResponse } from "@/types";
+import { TDecodePayload, TDecodeResponse } from "@/types/steg";
+
 class StegApi {
-  static async encode(payload: TEncodePayload) {
-    const res = await CallApi<TApiResponse<TEncodeResponse>>(
+  static async encode(payload: FormData) {
+    const res = await CallApi<Blob, FormData>(
       STEG_ENDPOINTS.ENCODE,
       "POST",
+      "blob",
       payload,
     );
 
-    if (res.status === "error") {
-      return { message: res.message };
+    if (!(res instanceof Blob)) {
+      throw new Error("API did not return a Blob");
     }
 
-    return { data: res.data, message: res.message };
+    return res;
   }
 
   static async decode(payload: TDecodePayload) {
     const res = await CallApi<TApiResponse<TDecodeResponse>>(
       STEG_ENDPOINTS.ENCODE,
       "POST",
+      "blob",
       payload,
     );
 

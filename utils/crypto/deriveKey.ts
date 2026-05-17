@@ -1,7 +1,7 @@
 import { encoder, toSafeBuffer } from "./converters";
 
 export const deriveCryptoKey = async (passphrase: string, salt: Uint8Array) => {
-  const keyMaterial = await crypto.subtle.importKey(
+  const keyMaterial = await window.crypto.subtle.importKey(
     "raw",
     encoder.encode(passphrase),
     { name: "PBKDF2" },
@@ -9,7 +9,7 @@ export const deriveCryptoKey = async (passphrase: string, salt: Uint8Array) => {
     ["deriveKey"],
   );
 
-  const derived = crypto.subtle.deriveKey(
+  const derived = window.crypto.subtle.deriveKey(
     {
       name: "PBKDF2",
       hash: "SHA-256",

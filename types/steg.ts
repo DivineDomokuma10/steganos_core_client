@@ -6,10 +6,16 @@ export type TEncryptedPayload = {
   ciphertext: string;
 };
 
+export type TStegImageMeta = {
+  size: number;
+  format: string;
+  fileName: string;
+};
+
 export type TEncodeResponse = Blob;
 
-export type TDecodePayload = { image: File };
-
 export type TDecodeResponse = TEncryptedPayload;
+
+export type TDecodePayload = { image: File };
 
 export type TEncodePayload = Prettify<TEncryptedPayload & TDecodePayload>;

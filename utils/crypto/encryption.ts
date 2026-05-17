@@ -3,12 +3,12 @@ import { TEncryptedPayload } from "@/types/steg";
 import { decoder, encoder, fromBase64, toBase64 } from "./converters";
 
 export const encryptMessage = async (message: string, passphrase: string) => {
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv = window.crypto.getRandomValues(new Uint8Array(12));
+  const salt = window.crypto.getRandomValues(new Uint8Array(16));
 
   const key = await deriveCryptoKey(passphrase, salt);
 
-  const cipherTextBuffer = await crypto.subtle.encrypt(
+  const cipherTextBuffer = await window.crypto.subtle.encrypt(
     { name: "AES-GCM", iv },
     key,
     encoder.encode(message),
@@ -31,7 +31,7 @@ export const decryptMessage = async (
 
   const key = await deriveCryptoKey(passphrase, salt);
 
-  const decryptedBuffer = await crypto.subtle.decrypt(
+  const decryptedBuffer = await window.crypto.subtle.decrypt(
     {
       name: "AES-GCM",
       iv,

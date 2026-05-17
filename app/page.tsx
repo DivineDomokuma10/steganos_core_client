@@ -41,7 +41,6 @@ export default function Home() {
   return (
     <DashboardWrapper>
       <main className="w-full flex flex-col md:flex-row md:items-center gap-10 py-5">
-        {/* <main className="w-full grid grid-cols-1 gap-5 md:gap-7 md:grid-cols-3 justify-center"> */}
         <ProfileHeader {...userData} />
 
         <EncodeActionCard />

@@ -6,8 +6,7 @@ import { TDecodePayload, TEncodePayload } from "@/types/steg";
 export const useEncodeMutation = () => {
   return useMutation({
     mutationKey: ["encode"],
-    mutationFn: async (payload: TEncodePayload) =>
-      await StegApi.encode(payload),
+    mutationFn: async (payload: FormData) => await StegApi.encode(payload),
   });
 };
 

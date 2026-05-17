@@ -1,21 +1,28 @@
 "use client";
-import { Loader2 } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { stegSchema } from "@/schema/steg";
 import { generatePassphrase } from "@/utils";
+import { encryptMessage } from "@/utils/crypto/encryption";
+
+import { stegSchema } from "@/schema/steg";
+import { useStegImage } from "@/hook/steg";
+import { useEncodeMutation } from "@/hook/queries/steg";
 import { TStegFormValues } from "@/types/schema-derived";
 import { AuthInput, AuthTextArea } from "../auth/components";
 
+import { StegImagePreview } from "./components";
 import Button from "@/components/shared/button";
 import { FileUpload } from "@/components/shared/media-upload";
 import DashboardWrapper from "@/components/shared/dashboard-wrapper";
-import { decryptMessage, encryptMessage } from "@/utils/crypto/encryption";
-import { useEncodeMutation } from "@/hook/queries/steg";
+import { ArrowLeft } from "lucide-react";
 
 const EncodePage = () => {
-  const { handleSubmit, register, control, formState, setValue } =
+  const [passPhrase, setPassPhrase] = useState("");
+  const [isStegDone, setIStegDone] = useState(false);
+
+  const { handleSubmit, register, control, formState, setValue, reset } =
     useForm<TStegFormValues>({
       mode: "onChange",
       resolver: zodResolver(stegSchema),
@@ -29,82 +36,105 @@ const EncodePage = () => {
 
   const { mutate, isPending } = useEncodeMutation();
 
+  const { meta, stegImgUrl, handleImgUrl, downloadStegImg } = useStegImage();
+
   const generatePhrase = () => {
     const phrase = generatePassphrase();
 
     setValue("passphrase", phrase, {
       shouldDirty: true,
+      shouldValidate: true,
     });
+
+    setPassPhrase(phrase);
   };
 
   const onsubmit = async (data: TStegFormValues) => {
-    console.log("raw", data);
-
     const { image, message, passphrase } = data;
 
     const result = await encryptMessage(message, passphrase);
 
-    const payload = { ...result, image };
+    const formData = new FormData();
 
-    mutate(payload, {
+    formData.append("image", image);
+    formData.append("iv", result.iv);
+    formData.append("salt", result.salt);
+    formData.append("ciphertext", result.ciphertext);
+
+    mutate(formData, {
       onSuccess(res) {
-        console.log(res);
+        handleImgUrl(res);
+        setIStegDone(true);
       },
       onError(err) {
         console.error(err.message);
       },
     });
+
+    reset();
   };
 
   return (
     <DashboardWrapper>
-      <main className="p-5">
-        <form
-          onSubmit={handleSubmit(onsubmit)}
-          className="grid grid-cols-1 md:grid-cols-2 gap-10"
-        >
-          <AuthTextArea
-            rows={10}
-            name="message"
-            errors={errors}
-            register={register}
-            label="SECRET_MESSAGE"
-            placeholder="INPUT PLAIN TEXT DATA"
-          />
-
-          <FileUpload control={control} name="image" label="MASKING_IMAGE" />
-
-          <AuthInput
-            type="text"
-            errors={errors}
-            name="passphrase"
-            label="PASS_PHRASE"
-            register={register}
-            disabled
-            placeholder="GENERATE PASSPHRASE"
-          >
+      <main className="">
+        {isStegDone ? (
+          <div className="w-full h-fit space-y-5">
             <button
-              type="button"
-              onClick={generatePhrase}
-              className="absolute right-5 top-1/3 text-primary font-semibold cursor-pointer"
+              onClick={() => setIStegDone(false)}
+              className="text-primary cursor-pointer flex items-center p-3 text-lg gap-3"
             >
-              GENERATE
+              <ArrowLeft />
+              ENCODE ANOTHER
             </button>
-          </AuthInput>
-          <div className="h-full flex items-end">
-            <Button
-              type="submit"
-              disabled={!isValid}
-              className="w-full text-lg flex items-center justify-center h-fit p-4 disabled:bg-primary/10 disabled:hover:scale-none"
-            >
-              {isPending ? (
-                <Loader2 size={30} className="animate-spin" />
-              ) : (
-                "ENCODE PROTOCOL"
-              )}
-            </Button>
+
+            <StegImagePreview
+              {...{ downloadStegImg, meta, stegImgUrl, passPhrase }}
+            />
           </div>
-        </form>
+        ) : (
+          <form
+            onSubmit={handleSubmit(onsubmit)}
+            className="grid grid-cols-1 md:grid-cols-2 gap-10"
+          >
+            <AuthTextArea
+              rows={10}
+              name="message"
+              errors={errors}
+              register={register}
+              label="SECRET_MESSAGE"
+              placeholder="INPUT PLAIN TEXT DATA"
+            />
+
+            <FileUpload control={control} name="image" label="MASKING_IMAGE" />
+
+            <AuthInput
+              type="text"
+              errors={errors}
+              name="passphrase"
+              label="PASS_PHRASE"
+              register={register}
+              disabled
+              placeholder="GENERATE PASSPHRASE"
+            >
+              <button
+                type="button"
+                onClick={generatePhrase}
+                className="absolute right-5 top-1/3 text-primary font-semibold cursor-pointer"
+              >
+                GENERATE
+              </button>
+            </AuthInput>
+            <div className="h-full flex items-end">
+              <Button
+                type="submit"
+                disabled={!isValid || isPending}
+                className="w-full text-lg flex items-center justify-center h-fit p-4 disabled:bg-primary/10 disabled:hover:scale-none"
+              >
+                {isPending ? "ENCODINE MESSAGE ..." : "ENCODE PROTOCOL"}
+              </Button>
+            </div>
+          </form>
+        )}
       </main>
     </DashboardWrapper>
   );

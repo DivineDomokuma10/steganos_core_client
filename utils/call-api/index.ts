@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 
-import { THttpMethod } from "@/types";
+import { THttpMethod, TResponseType } from "@/types";
 import { assertEnv, getHeaderConfig } from "./helper";
 import { requestInterceptorFunc } from "../interceptors/request";
 import { responseInterceptorErrFunc } from "../interceptors/response";
@@ -21,6 +21,7 @@ api.interceptors.response.use((res) => res, responseInterceptorErrFunc);
 const CallApi = async <T, P = unknown>(
   url: string,
   method: THttpMethod,
+  responseType: TResponseType = "json",
   payload?: P,
 ): Promise<T> => {
   try {
@@ -31,6 +32,7 @@ const CallApi = async <T, P = unknown>(
       headers: {
         ...getHeaderConfig(payload),
       },
+      responseType,
     });
 
     return resp.data as T;

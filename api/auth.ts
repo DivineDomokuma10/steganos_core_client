@@ -10,6 +10,7 @@ class AuthApi {
     const res = await CallApi<TApiResponse<ILoginResponse>>(
       AUTH_ENDPOINTS.LOGIN,
       "POST",
+      "json",
       payload,
     );
 
@@ -24,6 +25,7 @@ class AuthApi {
     const res = await CallApi<TApiResponse<IRegisterResponse>>(
       AUTH_ENDPOINTS.REGISTER,
       "POST",
+      "json",
       payload,
     );
 
