@@ -2,7 +2,7 @@ import CallApi from "@/utils/call-api";
 import { STEG_ENDPOINTS } from "@/enum";
 
 import { TApiResponse } from "@/types";
-import { TDecodePayload, TDecodeResponse } from "@/types/steg";
+import { TDecodeResponse } from "@/types/steg";
 
 class StegApi {
   static async encode(payload: FormData) {
@@ -20,11 +20,11 @@ class StegApi {
     return res;
   }
 
-  static async decode(payload: TDecodePayload) {
-    const res = await CallApi<TApiResponse<TDecodeResponse>>(
-      STEG_ENDPOINTS.ENCODE,
+  static async decode(payload: FormData) {
+    const res = await CallApi<TApiResponse<TDecodeResponse>, FormData>(
+      STEG_ENDPOINTS.DECODE,
       "POST",
-      "blob",
+      "json",
       payload,
     );
 

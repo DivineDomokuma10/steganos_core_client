@@ -11,7 +11,7 @@ export const HeaderNav = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="w-full flex items-center space-x-3 justify-between p-5 shadow fixed top-0 left-0 bg-background md:py-7 md:px-14">
+    <nav className="w-full flex items-center space-x-3 justify-between z-30 p-5 shadow fixed top-0 left-0 bg-background md:py-7 md:px-14">
       <AppLogo />
 
       <section className="items-center space-x-10 hidden md:flex">

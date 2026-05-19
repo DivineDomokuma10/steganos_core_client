@@ -1,8 +1,10 @@
 import z from "zod";
-import { stegSchema } from "@/schema/steg";
+import { decodeSchema, encodeSchema } from "@/schema/steg";
 import { loginSchema, registerSchema } from "@/schema/auth";
 
-export type TStegFormValues = z.infer<typeof stegSchema>;
+export type TEncodeStegFormValues = z.infer<typeof encodeSchema>;
+
+export type TDecodeStegFormValues = z.infer<typeof decodeSchema>;
 
 export type TLoginFormValues = z.infer<typeof loginSchema>;
 

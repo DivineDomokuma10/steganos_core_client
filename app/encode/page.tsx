@@ -6,10 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { generatePassphrase } from "@/utils";
 import { encryptMessage } from "@/utils/crypto/encryption";
 
-import { stegSchema } from "@/schema/steg";
+import { encodeSchema } from "@/schema/steg";
 import { useStegImage } from "@/hook/steg";
 import { useEncodeMutation } from "@/hook/queries/steg";
-import { TStegFormValues } from "@/types/schema-derived";
+import { TEncodeStegFormValues } from "@/types/schema-derived";
 import { AuthInput, AuthTextArea } from "../auth/components";
 
 import { StegImagePreview } from "./components";
@@ -23,9 +23,9 @@ const EncodePage = () => {
   const [isStegDone, setIStegDone] = useState(false);
 
   const { handleSubmit, register, control, formState, setValue, reset } =
-    useForm<TStegFormValues>({
+    useForm<TEncodeStegFormValues>({
       mode: "onChange",
-      resolver: zodResolver(stegSchema),
+      resolver: zodResolver(encodeSchema),
       defaultValues: {
         message: "",
         passphrase: "",
@@ -49,7 +49,7 @@ const EncodePage = () => {
     setPassPhrase(phrase);
   };
 
-  const onsubmit = async (data: TStegFormValues) => {
+  const onsubmit = async (data: TEncodeStegFormValues) => {
     const { image, message, passphrase } = data;
 
     const result = await encryptMessage(message, passphrase);
@@ -130,7 +130,7 @@ const EncodePage = () => {
                 disabled={!isValid || isPending}
                 className="w-full text-lg flex items-center justify-center h-fit p-4 disabled:bg-primary/10 disabled:hover:scale-none"
               >
-                {isPending ? "ENCODINE MESSAGE ..." : "ENCODE PROTOCOL"}
+                {isPending ? "ENCODING MESSAGE ..." : "ENCODE PROTOCOL"}
               </Button>
             </div>
           </form>
