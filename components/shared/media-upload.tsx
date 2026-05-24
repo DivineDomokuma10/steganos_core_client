@@ -176,12 +176,13 @@ export function FileUpload<T extends FieldValues>({
         )}
       </div>
 
-      {error?.message && (
+      {(error?.message || rejectionError) && (
         <div className="flex items-center space-x-2">
           <Terminal size={18} className="stroke-3 text-red-500" />
 
           <p className="text-red-500">
             {(error?.message as string).toUpperCase()}
+            {rejectionError.toUpperCase()}
           </p>
         </div>
       )}

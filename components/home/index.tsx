@@ -69,7 +69,7 @@ export const EncodeActionCard = () => {
         </p>
 
         <p className="text-lg text-gray-700">
-          Hide sensitive message within carrier files using Steganos_Core's
+          Hide sensitive message within carrier files using Steganos_Core&apos;s
           steganographic layering algorithms.
         </p>
 

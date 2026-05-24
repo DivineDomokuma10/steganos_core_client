@@ -49,7 +49,7 @@ const DecodePage = () => {
       },
     });
 
-    // reset();
+    reset();
   };
   return (
     <DashboardWrapper>

@@ -16,7 +16,7 @@ const ProtectRoutes = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     initSession();
-  }, []);
+  }, [initSession]);
 
   useEffect(() => {
     if (isLoading) return;

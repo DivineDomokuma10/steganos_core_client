@@ -15,7 +15,7 @@ const DashboardWrapper = ({ children }: { children: ReactNode }) => {
         <div>
           <h3 className="text-white">
             © 2026 <span className="text-primary glow-text">STEGANOS_CORE</span>{" "}
-            // STEGANOGRAPHY_ENGINE
+            STEGANOGRAPHY_ENGINE
           </h3>
 
           <p className="text-sm text-gray-300">
