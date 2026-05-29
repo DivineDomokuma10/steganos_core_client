@@ -17,7 +17,7 @@ const ProtectRoutes = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     void initSession();
-  }, []);
+  }, [initSession]);
 
   useEffect(() => {
     if (isLoading) return;
@@ -33,7 +33,7 @@ const ProtectRoutes = ({ children }: { children: ReactNode }) => {
       router.replace("/");
       return;
     }
-  }, [isLoading, sessionData, pathname]);
+  }, [isLoading, sessionData, pathname, router]);
 
   if (isLoading) {
     return (
