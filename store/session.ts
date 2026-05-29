@@ -1,37 +1,40 @@
 import { create } from "zustand";
 
-import AuthStore from "./auth";
-import AuthApi from "@/api/auth";
+import UserApi from "@/api/user";
+
+type TSession = { userId: string };
 
 interface ISessionStore {
   isLoading: boolean;
+  session: TSession | null;
+
   initSession: () => Promise<void>;
+  setLoading: (data: boolean) => void;
+  mutateSession: (data: TSession) => void;
 }
 
 const SessionStore = create<ISessionStore>()((set) => ({
   isLoading: true,
 
-  initSession: async () => {
-    try {
-      set({ isLoading: true });
+  session: null,
+  setLoading: (data) => set({ isLoading: data }),
 
-      const res = await AuthApi.refresh();
+  mutateSession: (data) => set({ session: data }),
+
+  initSession: async () => {
+    set({ isLoading: true });
+
+    try {
+      const res = await UserApi.getUserProfile();
 
       if (res.data) {
-        AuthStore.getState().mutateAuthData(res.data);
-        console.log("session store calls refresh");
-
-        set({ isLoading: false });
+        set({ session: { userId: res.data._id } });
       } else {
-        AuthStore.getState().clearAuthData();
-        set({ isLoading: false });
+        set({ session: null });
       }
-
-      console.log("initSession called refresh");
-    } catch {
-      AuthStore.getState().clearAuthData();
-    } finally {
+    } catch (error) {
       set({ isLoading: false });
+      set({ session: null });
     }
   },
 }));

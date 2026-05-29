@@ -22,7 +22,7 @@ class AuthApi {
   }
 
   static async register(payload: TRegisterFormValues) {
-    const res = await CallApi<TApiResponse<IRegisterResponse>>(
+    const res = await CallApi<TApiResponse<null>>(
       AUTH_ENDPOINTS.REGISTER,
       "POST",
       "json",
@@ -41,6 +41,16 @@ class AuthApi {
       AUTH_ENDPOINTS.REFRESH,
       "GET",
     );
+
+    if (res.status === "error") {
+      return { message: res.message };
+    }
+
+    return { data: res.data, message: res.message };
+  }
+
+  static async logout() {
+    const res = await CallApi<TApiResponse<null>>(AUTH_ENDPOINTS.LOGOUT, "GET");
 
     if (res.status === "error") {
       return { message: res.message };

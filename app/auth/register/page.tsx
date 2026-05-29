@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+
 import { useForm } from "react-hook-form";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useResponseMsg } from "@/hook";
@@ -15,6 +17,7 @@ import MessagesBox from "@/components/shared/message-box";
 import { TRegisterFormValues } from "@/types/schema-derived";
 
 const Register = () => {
+  const router = useRouter();
   const { register, handleSubmit, formState } = useForm<TRegisterFormValues>({
     mode: "onChange",
     resolver: zodResolver(registerSchema),
@@ -30,6 +33,8 @@ const Register = () => {
     mutate(data, {
       onSuccess(res) {
         setResponseMsg({ msg: res.message, status: "success" });
+
+        setTimeout(() => router.replace("/auth/login"), 1000);
       },
       onError(err) {
         setResponseMsg({ msg: err.message, status: "error" });

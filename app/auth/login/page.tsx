@@ -16,6 +16,7 @@ import { loginSchema } from "@/schema/auth";
 import Button from "@/components/shared/button";
 import MessagesBox from "@/components/shared/message-box";
 import { TLoginFormValues } from "@/types/schema-derived";
+import SessionStore from "@/store/session";
 
 const Login = () => {
   const router = useRouter();
@@ -33,6 +34,8 @@ const Login = () => {
 
   const { mutateAuthData } = useAuthStore();
 
+  const mutateSession = SessionStore((state) => state.mutateSession);
+
   const onsubmit = async (data: TLoginFormValues) => {
     mutate(data, {
       onSuccess(res) {
@@ -40,8 +43,11 @@ const Login = () => {
           const { accessToken, userId } = res.data;
 
           mutateAuthData({
-            userId,
             accessToken,
+          });
+
+          mutateSession({
+            userId,
           });
         }
 

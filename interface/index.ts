@@ -2,7 +2,8 @@ export interface IRegisterResponse {
   userId: string;
 }
 
-export interface ILoginResponse extends IRegisterResponse {
+export interface ILoginResponse {
+  userId: string;
   accessToken: string;
 }
 

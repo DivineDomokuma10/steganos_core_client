@@ -3,7 +3,7 @@ import { ReactNode, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 import { Loader } from "./utils";
-import AuthStore from "@/store/auth";
+
 import SessionStore from "@/store/session";
 import { OPEN_ROUTE } from "@/utils/constant";
 
@@ -11,28 +11,29 @@ const ProtectRoutes = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { authData } = AuthStore();
-  const { isLoading, initSession } = SessionStore();
+  const sessionData = SessionStore((state) => state.session);
+  const isLoading = SessionStore((state) => state.isLoading);
+  const initSession = SessionStore((state) => state.initSession);
 
   useEffect(() => {
-    initSession();
-  }, [initSession]);
+    void initSession();
+  }, []);
 
   useEffect(() => {
     if (isLoading) return;
 
-    const isAuthPage = OPEN_ROUTE.includes(pathname);
+    const isAuthPage = OPEN_ROUTE.some((route) => pathname.startsWith(route));
 
-    if (!authData && !isAuthPage) {
+    if (!sessionData && !isAuthPage) {
       router.replace("/auth/login");
       return;
     }
 
-    if (authData && isAuthPage) {
+    if (sessionData && isAuthPage) {
       router.replace("/");
       return;
     }
-  }, [isLoading, authData, pathname]);
+  }, [isLoading, sessionData, pathname]);
 
   if (isLoading) {
     return (

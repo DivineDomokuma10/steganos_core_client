@@ -1,5 +1,6 @@
 import AuthApi from "@/api/auth";
 import AuthStore from "@/store/auth";
+import SessionStore from "@/store/session";
 
 let isRefreshing = false;
 let refreshQueue: Array<(token: string) => void> = [];
@@ -20,17 +21,17 @@ export const refreshAccessToken = async (): Promise<string> => {
 
   try {
     const { data } = await AuthApi.refresh();
-    console.log("reponse incterceptor calls refresh");
 
     if (!data?.accessToken) {
       throw new Error("REFRESH_FAILED");
     }
 
     AuthStore.getState().mutateAuthData(data);
+    SessionStore.getState().mutateSession({ userId: data.userId });
+    SessionStore.getState().mutateSession({ userId: data.userId });
+    SessionStore.getState().setLoading(false);
 
     processQueue(data.accessToken);
-
-    console.log("response interceptor called refresh");
 
     return data.accessToken;
   } catch (err) {

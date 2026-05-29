@@ -2,7 +2,13 @@ import { Database, LayoutGrid, Lock, LockOpen } from "lucide-react";
 
 export const MAX_SIZE = 10 * 1024 * 1024;
 
-export const OPEN_ROUTE = ["/auth/login", "/auth/register", "/auth/refresh"];
+export const OPEN_ROUTE = [
+  "/auth/me",
+  "/auth/login",
+  "/auth/logout",
+  "/auth/refresh",
+  "/auth/register",
+];
 
 export const CHARSET =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";

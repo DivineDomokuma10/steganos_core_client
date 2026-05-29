@@ -1,5 +1,6 @@
 export enum AUTH_ENDPOINTS {
   LOGIN = "/api/auth/login",
+  LOGOUT = "/api/auth/logout",
   REFRESH = "/api/auth/refresh",
   REGISTER = "/api/auth/register",
 }

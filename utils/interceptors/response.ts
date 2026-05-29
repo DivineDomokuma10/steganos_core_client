@@ -4,6 +4,7 @@ import AuthStore from "@/store/auth";
 import { api } from "../call-api";
 import { refreshAccessToken } from "../refresh-manager";
 import { OPEN_ROUTE } from "../constant";
+import { handleLogout } from "..";
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
@@ -26,7 +27,7 @@ export const responseInterceptorErrFunc = async (error: AxiosError) => {
     return Promise.reject(error);
   }
 
-  if (OPEN_ROUTE.includes(originalRequest.url as string)) {
+  if (OPEN_ROUTE.some((route) => originalRequest.url?.includes(route))) {
     AuthStore.getState().clearAuthData?.();
     return Promise.reject(error);
   }
@@ -44,8 +45,7 @@ export const responseInterceptorErrFunc = async (error: AxiosError) => {
 
     return api(originalRequest);
   } catch (err) {
-    AuthStore.getState().clearAuthData?.();
-    window.location.replace("/auth/login");
+    await handleLogout();
     return Promise.reject(err);
   }
 };

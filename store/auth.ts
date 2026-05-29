@@ -1,7 +1,6 @@
 import { create } from "zustand";
 
 export interface IAuthData {
-  userId: string;
   accessToken: string;
 }
 
