@@ -10,6 +10,7 @@ import Button from "@/components/shared/button";
 import { useDecodeMutation } from "@/hook/queries/steg";
 import { useState } from "react";
 import { decryptMessage } from "@/utils/crypto/encryption";
+import { toast } from "sonner";
 
 const DecodePage = () => {
   const [decodedMsg, setDecodedMsg] = useState("");
@@ -43,9 +44,11 @@ const DecodePage = () => {
           setDecodedMsg(result);
           setIsDecoded(true);
         }
+
+        toast.success(res.message);
       },
       onError(err) {
-        console.error(err.message);
+        toast.error(err.message);
       },
     });
 

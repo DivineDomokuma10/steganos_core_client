@@ -2,7 +2,7 @@ import { TApiResponse } from "@/types";
 import CallApi from "@/utils/call-api";
 import { AUTH_ENDPOINTS } from "@/enum";
 
-import { ILoginResponse, IRegisterResponse } from "@/interface";
+import { ILoginResponse } from "@/interface";
 import { TLoginFormValues, TRegisterFormValues } from "@/types/schema-derived";
 
 class AuthApi {

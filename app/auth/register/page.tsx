@@ -1,19 +1,17 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
 import { useForm } from "react-hook-form";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useResponseMsg } from "@/hook";
 import { useRegisterMutation } from "@/hook/queries/auth";
 
 import { AuthInput } from "../components";
-import { registerSchema } from "@/schema/auth";
-
 import Button from "@/components/shared/button";
-import MessagesBox from "@/components/shared/message-box";
+import { toast } from "@/components/shared/toast";
+
+import { registerSchema } from "@/schema/auth";
 import { TRegisterFormValues } from "@/types/schema-derived";
 
 const Register = () => {
@@ -27,25 +25,21 @@ const Register = () => {
 
   const { mutate, isPending } = useRegisterMutation();
 
-  const { resMsg, setResponseMsg } = useResponseMsg();
-
   const onsubmit = async (data: TRegisterFormValues) => {
     mutate(data, {
       onSuccess(res) {
-        setResponseMsg({ msg: res.message, status: "success" });
+        toast.success(res.message);
 
         setTimeout(() => router.replace("/auth/login"), 1000);
       },
       onError(err) {
-        setResponseMsg({ msg: err.message, status: "error" });
+        toast.error(err.message);
       },
     });
   };
 
   return (
     <main className="w-full flex flex-col items-center space-y-7 p-5 md:w-[35%]">
-      {resMsg && <MessagesBox status={resMsg.status} messages={resMsg.msg} />}
-
       <form
         onSubmit={handleSubmit(onsubmit)}
         className="w-full flex flex-col items-center space-y-10 p-6 bg-gray-800/30"

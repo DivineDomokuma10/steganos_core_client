@@ -17,6 +17,7 @@ import Button from "@/components/shared/button";
 import { FileUpload } from "@/components/shared/media-upload";
 import DashboardWrapper from "@/components/shared/dashboard-wrapper";
 import { ArrowLeft } from "lucide-react";
+import { toast } from "sonner";
 
 const EncodePage = () => {
   const [passPhrase, setPassPhrase] = useState("");
@@ -62,12 +63,14 @@ const EncodePage = () => {
     formData.append("ciphertext", result.ciphertext);
 
     mutate(formData, {
-      onSuccess(res) {
-        handleImgUrl(res);
+      onSuccess(img) {
+        handleImgUrl(img);
         setIStegDone(true);
+
+        toast.success("Image Encoded successfully");
       },
       onError(err) {
-        console.error(err.message);
+        toast.error(err.message);
       },
     });
 

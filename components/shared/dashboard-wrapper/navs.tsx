@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
-import { UserCircleIcon } from "lucide-react";
+import { LogOut, UserCircleIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 
-import { cn } from "@/utils";
+import { cn, handleLogout } from "@/utils";
 import AppLogo from "../logo";
 import { NAV_LINKS } from "@/utils/constant";
 
@@ -28,7 +28,16 @@ export const HeaderNav = () => {
         ))}
       </section>
 
-      <UserCircleIcon size={30} className="text-primary stroke-2" />
+      <section className="flex items-center space-x-4">
+        <UserCircleIcon size={30} className="text-primary stroke-2" />
+        <button
+          onClick={() => handleLogout()}
+          className="text-gray-400 hover:text-primary transition duration-200 cursor-pointer"
+          title="Logout"
+        >
+          <LogOut size={22} className="stroke-2" />
+        </button>
+      </section>
     </nav>
   );
 };

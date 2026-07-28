@@ -5,18 +5,17 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Fingerprint, Key, Loader2 } from "lucide-react";
 
-import { useResponseMsg } from "@/hook";
 import { useLoginMutation } from "@/hook/queries/auth";
+import { TLoginFormValues } from "@/types/schema-derived";
 
 import useAuthStore from "@/store/auth";
-import { AuthInput } from "../components";
+import SessionStore from "@/store/session";
 
 import { loginSchema } from "@/schema/auth";
 
+import { AuthInput } from "../components";
 import Button from "@/components/shared/button";
-import MessagesBox from "@/components/shared/message-box";
-import { TLoginFormValues } from "@/types/schema-derived";
-import SessionStore from "@/store/session";
+import { toast } from "@/components/shared/toast";
 
 const Login = () => {
   const router = useRouter();
@@ -28,11 +27,9 @@ const Login = () => {
 
   const { isValid, errors } = formState;
 
-  const { mutate, isPending } = useLoginMutation();
-
-  const { resMsg, setResponseMsg } = useResponseMsg();
-
   const { mutateAuthData } = useAuthStore();
+
+  const { mutate, isPending } = useLoginMutation();
 
   const mutateSession = SessionStore((state) => state.mutateSession);
 
@@ -51,20 +48,18 @@ const Login = () => {
           });
         }
 
-        setResponseMsg({ msg: res.message, status: "success" });
+        toast.success(res.message);
 
         setTimeout(() => router.replace("/"), 1000);
       },
       onError(err) {
-        setResponseMsg({ msg: err.message, status: "error" });
+        toast.error(err.message);
       },
     });
   };
 
   return (
     <main className="w-full flex flex-col items-center space-y-7 p-5 md:w-[35%]">
-      {resMsg && <MessagesBox status={resMsg.status} messages={resMsg.msg} />}
-
       <form
         onSubmit={handleSubmit(onsubmit)}
         className="w-full flex flex-col items-center space-y-10 p-6 bg-gray-800/30"

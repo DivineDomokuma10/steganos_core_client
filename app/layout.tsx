@@ -4,6 +4,7 @@ import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "@/providers/react-query";
 import ProtectRoutes from "@/components/protect";
+import { Toaster } from "@/components/shared/toast";
 
 const spaceGroktesk = Space_Grotesk({
   variable: "--font-space-groktesk",
@@ -24,8 +25,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${spaceGroktesk.variable} max-w-screen antialiased bg-background !font-space-groktesk`}
+        className={`${spaceGroktesk.variable} max-w-screen antialiased bg-background font-space-groktesk!`}
       >
+        <Toaster />
+
         <ReactQueryProvider>
           <ProtectRoutes>{children}</ProtectRoutes>
         </ReactQueryProvider>

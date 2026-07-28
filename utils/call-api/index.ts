@@ -28,7 +28,7 @@ const CallApi = async <T, P = unknown>(
     const resp = await api({
       url,
       method,
-      data: payload ?? undefined,
+      data: payload,
       headers: {
         ...getHeaderConfig(payload),
       },

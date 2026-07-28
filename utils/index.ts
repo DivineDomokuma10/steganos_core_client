@@ -32,10 +32,8 @@ export function formatToMB(sizeInByte: number): string {
 }
 
 export const handleLogout = async () => {
-  const res = await AuthApi.logout();
+  await AuthApi.logout();
 
-  if (res.data === null) {
-    AuthStore.getState().clearAuthData?.();
-    window.location.replace("/auth/login");
-  }
+  AuthStore.getState().clearAuthData?.();
+  window.location.replace("/auth/login");
 };

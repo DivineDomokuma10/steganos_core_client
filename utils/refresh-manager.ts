@@ -27,8 +27,9 @@ export const refreshAccessToken = async (): Promise<string> => {
     }
 
     AuthStore.getState().mutateAuthData(data);
+
     SessionStore.getState().mutateSession({ userId: data.userId });
-    SessionStore.getState().mutateSession({ userId: data.userId });
+
     SessionStore.getState().setLoading(false);
 
     processQueue(data.accessToken);
