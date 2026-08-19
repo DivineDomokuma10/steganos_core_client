@@ -70,7 +70,7 @@ const Login = () => {
             <p className="text-primary text-xs font-bold">READY</p>
           </div>
 
-          <h1 className="text-white font-semibold text-3xl">ACCESS PROTOCOL</h1>
+          <h1 className="text-white font-semibold text-3xl">LOGIN</h1>
         </header>
 
         <AuthInput
@@ -79,7 +79,7 @@ const Login = () => {
           errors={errors}
           icon={Fingerprint}
           register={register}
-          label="SECURE COMMS EMAIL"
+          label="EMAIL  ADDRESS"
           placeholder="SECURE EMAIL ADDRESS"
         />
 
@@ -90,7 +90,7 @@ const Login = () => {
             name="password"
             errors={errors}
             register={register}
-            label="ACCESS CIPHER"
+            label="PASSWORD"
             placeholder="* * * * * * * * * * * * * * * *"
           />
 
@@ -109,18 +109,14 @@ const Login = () => {
           disabled={!isValid}
           className="w-full text-lg flex items-center justify-center p-5 disabled:bg-primary/10 disabled:hover:scale-none"
         >
-          {isPending ? (
-            <Loader2 size={30} className="animate-spin" />
-          ) : (
-            "INITIATE SESSION"
-          )}
+          {isPending ? <Loader2 size={30} className="animate-spin" /> : "LOGIN"}
         </Button>
 
         <div className="w-full flex flex-col space-y-7 items-center">
           <section className="w-full flex items-center space-x-2">
             <div className="flex-1 h-0.5 bg-gray-100/10" />
 
-            <p className="text-sm text-gray-300 font-bold">NEW DEPLOYMENT?</p>
+            <p className="text-sm text-gray-300 font-bold">NO ACCOUNT?</p>
 
             <div className="flex-1 h-0.5 bg-gray-100/10" />
           </section>

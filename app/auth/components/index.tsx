@@ -1,6 +1,6 @@
 import { Prettify, TLucideIcon } from "@/types";
-import { Terminal } from "lucide-react";
-import { ReactNode } from "react";
+import { Eye, EyeOff, Terminal } from "lucide-react";
+import { ReactNode, useState } from "react";
 
 import {
   Path,
@@ -37,6 +37,8 @@ export function AuthInput<T extends FieldValues>({
   children,
 }: IAuthInputProps<T>) {
   const InputIcon = icon;
+  const [showPassword, setShowPassword] = useState(false);
+  const inputType = type === "password" && showPassword ? "text" : type;
 
   return (
     <label
@@ -49,13 +51,28 @@ export function AuthInput<T extends FieldValues>({
         <input
           id={name}
           disabled={disabled}
-          {...{ type, placeholder, ...register(name) }}
+          {...{ type: inputType, placeholder, ...register(name) }}
           className="bg-gray-800 p-5 w-full placeholder:text-lg placeholder:text-gray-400 focus:outline-primary"
         />
 
-        {InputIcon && (
-          <span className="absolute right-5 top-1/4">
-            <InputIcon size={27} className="text-primary" />
+        {(InputIcon || type === "password") && (
+          <span className="absolute right-5 top-1/4 flex items-center gap-3">
+            {InputIcon && <InputIcon size={27} className="text-primary" />}
+
+            {type === "password" && (
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                className="cursor-pointer"
+              >
+                {showPassword ? (
+                  <EyeOff size={27} className="text-primary" />
+                ) : (
+                  <Eye size={27} className="text-primary" />
+                )}
+              </button>
+            )}
           </span>
         )}
 

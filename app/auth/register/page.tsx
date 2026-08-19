@@ -51,7 +51,8 @@ const Register = () => {
           </div>
 
           <h1 className="text-white font-semibold text-3xl">
-            ESTABLISH IDENTITY
+            {/*ESTABLISH IDENTITY*/}
+            CREATE ACCOUNT
           </h1>
 
           <p className="text-lg text-gray-400">
@@ -64,8 +65,8 @@ const Register = () => {
           name="username"
           errors={errors}
           register={register}
-          label="OPERATIONAL ALIAS"
-          placeholder="SECURE EMAIL ADDRESS"
+          label="USERNAME"
+          placeholder="ENTER USERNAME"
         />
 
         <AuthInput
@@ -73,7 +74,7 @@ const Register = () => {
           name="email"
           errors={errors}
           register={register}
-          label="SECURE COMMS EMAIL"
+          label="EMAIL ADRESS"
           placeholder="SECURE EMAIL ADDRESS"
         />
 
@@ -82,7 +83,7 @@ const Register = () => {
           name="password"
           errors={errors}
           register={register}
-          label="DEFINE ACCESS CIPHER"
+          label="PASSWORD"
           placeholder="* * * * * * * * * * * * * * * *"
         />
 
@@ -106,7 +107,7 @@ const Register = () => {
           {isPending ? (
             <Loader2 size={30} className="animate-spin" />
           ) : (
-            "ESTABLISH IDENTITY"
+            "CREATE ACCOUNT"
           )}
         </Button>
 
