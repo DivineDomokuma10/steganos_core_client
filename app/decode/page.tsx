@@ -38,14 +38,16 @@ const DecodePage = () => {
 
     mutate(formData, {
       onSuccess: async (res) => {
-        if (res.data) {
+        try {
           const result = await decryptMessage(res.data, passphrase);
 
           setDecodedMsg(result);
           setIsDecoded(true);
-        }
 
-        toast.success(res.message);
+          toast.success(res.message);
+        } catch {
+          toast.error("Incorrect passphrase or corrupted image");
+        }
       },
       onError(err) {
         toast.error(err.message);

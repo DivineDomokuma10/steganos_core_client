@@ -29,7 +29,7 @@ class StegApi {
     );
 
     if (res.status === "error") {
-      return { message: res.message };
+      throw new Error(res.message);
     }
 
     return { data: res.data, message: res.message };

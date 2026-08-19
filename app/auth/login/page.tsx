@@ -125,7 +125,7 @@ const Login = () => {
             href={"/auth/register"}
             className="flex items-center space-x-2 transition duration-200 text-white font-bold hover:text-primary"
           >
-            <span>CREATE PROTOCOL</span>
+            <span>CREATE ACCOUNT</span>
             <ArrowRight />
           </Link>
         </div>

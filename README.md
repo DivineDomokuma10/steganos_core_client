@@ -12,7 +12,7 @@ Steganos Core Client acts as the frontend interface for the Steganos ecosystem. 
 
 - Secure message encoding into images
 - Message extraction and decoding
-- Optional encryption workflows
+- AES-GCM encryption of messages before encoding
 - Authentication and session handling
 - File upload management
 - Automatic token refresh handling
@@ -100,21 +100,27 @@ Features include:
 
 ### Encoding Flow
 
-1. User uploads image
-2. Message payload is prepared
-3. Optional encryption occurs
-4. Payload is sent to backend
-5. Backend returns encoded image blob
+1. User uploads a PNG image
+2. User enters a secret message (max 512 KB)
+3. Message is encrypted with AES-GCM using a generated passphrase
+4. Encrypted payload (`{ iv, salt, ciphertext }`) is sent to the backend
+5. Backend embeds the payload and returns an encoded PNG blob
 6. Blob URL is generated locally
-7. User downloads encoded image
+7. User downloads the encoded image
 
 ### Decoding Flow
 
-1. User uploads encoded image
-2. Image is sent to backend
-3. Backend extracts payload
-4. Optional decryption occurs
-5. Message is displayed to user
+1. User uploads the encoded PNG image
+2. Image is sent to the backend
+3. Backend extracts the encrypted payload
+4. The passphrase decrypts the payload via AES-GCM
+5. Decrypted message is displayed to the user
+
+### Constraints
+
+- Only PNG images up to 10 MB are accepted.
+- Secret messages must not exceed 512 KB.
+- A generated passphrase is required for both encryption and decryption.
 
 ---
 

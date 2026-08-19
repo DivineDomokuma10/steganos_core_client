@@ -1,8 +1,11 @@
 import { z } from "zod";
-import { MAX_SIZE } from "@/utils/constant";
+import { MAX_SIZE, MESSAGE_MAX_LENGTH } from "@/utils/constant";
 
 export const encodeSchema = z.object({
-  message: z.string().min(1, "Message is required"),
+  message: z
+    .string()
+    .min(1, "Message is required")
+    .max(MESSAGE_MAX_LENGTH, "Message must not exceed 512KB"),
   passphrase: z.string().min(6, "Passphrase must be at least 6 chars"),
   image: z
     .instanceof(File, {

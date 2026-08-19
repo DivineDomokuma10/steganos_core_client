@@ -24,11 +24,6 @@ export const loginSchema = z.object({
 
 export const registerSchema = z.object({
   email: z.email("Invalid email address"),
-
-  termsAndCondition: z.boolean().refine((val) => val === true, {
-    message: "You must accept the terms and conditions",
-  }),
-
   password: z.string().min(5, "Password must be at least 5 characters long"),
   username: z.string().min(2, "Username must be at least 2 characters"),
 });

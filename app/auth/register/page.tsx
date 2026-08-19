@@ -87,18 +87,6 @@ const Register = () => {
           placeholder="* * * * * * * * * * * * * * * *"
         />
 
-        <label className="w-full flex items-center space-x-2">
-          <input
-            type="checkbox"
-            {...register("termsAndCondition")}
-            className="w-6 h-6 accent-primary bg-slate-900 border-gray-600 rounded"
-          />
-
-          <span className="text-gray-500 font-bold text-lg">
-            ACCEPT SECURITY PROTOCOLS
-          </span>
-        </label>
-
         <Button
           type="submit"
           disabled={!isValid || isPending}
